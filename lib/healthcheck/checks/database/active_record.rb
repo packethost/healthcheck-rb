@@ -19,7 +19,7 @@ module Healthcheck
         private
 
         def do_check
-          ActiveRecord::Base.connection.present?
+          ::ActiveRecord::Base.connection.present?
         rescue => ex
           logger.error "[health report] Error connecting to database: #{ex.message}"
           false
