@@ -1,8 +1,7 @@
 # Healthcheck
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/healthcheck`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A library for reporting on the health of your ruby app. Useful for providing
+a route for Zabbix or whatever to ping.
 
 ## Installation
 
@@ -22,15 +21,45 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+First, we need to set up some checks to run. Healthcheck comes with a couple,
+but you can easily add your own.
+
+```ruby
+# config/initializers/healthcheck.rb
+
+require 'healthcheck/checks/git'
+require 'healthcheck/checks/database/active_record'
+
+Healthcheck.configure do |config|
+  config.checks = %w(
+    Healthcheck::Checks::Git
+    Healthcheck::Checks::Database::ActiveRecord
+  )
+end
+```
+
+That's all well and good, but we need to set up the middleware so that we have
+a route to ping:
+
+```ruby
+# config/application.rb
+
+module MyApp
+  class Application < Rails::Application
+    require 'healthcheck/middleware'
+
+    # Optionally specify a path (defaults to /healthcheck).
+    config.middleware.insert_before 0, Healthcheck::Middleware, '/annie-are-you-ok'
+  end
+end
+```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake rspec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bundle` to install dependencies. Then, run `rake rspec` to run the tests.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/healthcheck.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/packethost/healthcheck.
