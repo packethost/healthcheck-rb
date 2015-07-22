@@ -5,10 +5,10 @@ require 'active_support/core_ext/hash/transform_values'
 
 module Healthcheck
   class Report
-    attr_reader :reports
+    attr_reader :checks
 
     def initialize(checks = Healthcheck.configuration.checks)
-      @reports = checks.map do |check|
+      @checks = checks.map do |check|
         check = case check
                 when Healthcheck::Checks::AbstractCheck then check
                 when Class then check.new
@@ -19,11 +19,15 @@ module Healthcheck
     end
 
     def ok?
-      reports.values.all?(&:ok?)
+      checks.values.map do |check|
+        Thread.new(check) { |c| c.ok? }
+      end.map(&:value).all?
     end
 
     def to_json
-      reports.transform_values(&:report).to_json
+      checks.transform_values do |check|
+        Thread.new(check) { |c| c.report }
+      end.transform_values(&:value).to_json
     end
   end
 end
