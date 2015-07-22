@@ -8,6 +8,10 @@ module Healthcheck
           @sha = sha
         end
 
+        def ok?
+          true
+        end
+
         def report
           result || :unknown
         end
