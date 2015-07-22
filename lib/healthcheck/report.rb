@@ -12,9 +12,6 @@ module Healthcheck
         check = case check
                 when Healthcheck::Checks::AbstractCheck then check
                 when Class then check.new
-                when Symbol
-                  require "healthcheck/checks/#{check}"
-                  "Healthcheck::Checks::#{check.to_s.classify}".constantize.new
                 else check.constantize.new
                 end
         [check.class.slug, check]
