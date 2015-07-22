@@ -25,7 +25,8 @@ module Healthcheck
       end
 
       def result
-        @result ||= perform
+        @result = perform unless instance_variable_defined?(:@result)
+        @result
       end
 
       def perform
