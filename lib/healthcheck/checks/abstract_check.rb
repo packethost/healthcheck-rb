@@ -15,7 +15,7 @@ module Healthcheck
       end
 
       def self.slug
-        name.to_s.demodulize.downcase.underscore.to_sym
+        name.to_s.demodulize.underscore.to_sym
       end
 
       private

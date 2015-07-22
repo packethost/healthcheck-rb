@@ -9,11 +9,7 @@ module Healthcheck
 
     def initialize(checks = Healthcheck.configuration.checks)
       @checks = checks.map do |check|
-        check = case check
-                when Healthcheck::Checks::AbstractCheck then check
-                when Class then check.new
-                else check.constantize.new
-                end
+        check = initialize_check(check)
         [check.class.slug, check]
       end.to_h
     end
@@ -28,6 +24,16 @@ module Healthcheck
       checks.transform_values do |check|
         Thread.new(check) { |c| c.report }
       end.transform_values(&:value).to_json
+    end
+
+    private
+
+    def initialize_check(check)
+      case check
+      when Healthcheck::Checks::AbstractCheck then check
+      when Class then check.new
+      else check.constantize.new
+      end
     end
   end
 end
