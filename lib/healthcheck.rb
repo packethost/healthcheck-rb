@@ -6,7 +6,7 @@ require 'active_support/core_ext/module/attribute_accessors'
 
 module Healthcheck
   class << self
-    def configure(&block)
+    def configure(&_blk)
       yield(configuration)
       configuration
     end

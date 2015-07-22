@@ -15,7 +15,7 @@ RSpec.describe Healthcheck::Configuration do
 
     context 'when Rails is available' do
       before do
-        module ::Rails
+        module Rails
           def self.logger
             'rails logger'
           end
