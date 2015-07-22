@@ -3,6 +3,8 @@
 A library for reporting on the health of your ruby app. Useful for providing
 a route for Zabbix or whatever to ping.
 
+[![Build Status](https://travis-ci.org/packethost/healthcheck-rb.svg)](https://travis-ci.org/packethost/healthcheck-rb)
+
 ## Installation
 
 Add this line to your application's Gemfile:
