@@ -7,7 +7,7 @@ module Healthcheck
       attr_writer :logger
 
       def ok?
-        true
+        result == true
       end
 
       def report
@@ -22,6 +22,14 @@ module Healthcheck
 
       def logger
         @logger || Healthcheck.configuration.logger
+      end
+
+      def result
+        @result ||= perform
+      end
+
+      def perform
+        fail NotImplementedError, 'Checks must implement this method'
       end
     end
   end

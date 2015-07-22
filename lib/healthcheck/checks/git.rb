@@ -6,6 +6,12 @@ module Healthcheck
       def report
         ENV['GIT_SHA'] || :unknown
       end
+
+      private
+
+      def perform
+        true
+      end
     end
   end
 end
