@@ -56,6 +56,11 @@ module MyApp
 end
 ```
 
+## Checks
+
+There are lots of checks you can use or subclass. [Here's a list of the checks
+are that are currently supported](https://github.com/packethost/healthcheck-rb/tree/master/lib/healthcheck/checks). We'll gladly accept pull requests for additional checks, and will continue to add to the existing checks according to the needs of our stack.
+
 ## Development
 
 After checking out the repo, run `bundle` to install dependencies. Then, run `rake rspec` to run the tests.
