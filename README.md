@@ -1,9 +1,20 @@
 # Healthcheck
 
-A library for reporting on the health of your ruby app. Useful for providing
-a route for Zabbix or whatever to ping.
-
 [![Build Status](https://travis-ci.org/packethost/healthcheck-rb.svg)](https://travis-ci.org/packethost/healthcheck-rb)
+
+> Another issue is If the components do not compose cleanly, then all you are doing is shifting complexity from inside a component to the connections between components.
+>
+> -- <cite>Martin Fowler & James Lewis, [Microservices](http://martinfowler.com/articles/microservices.html)</cite>
+
+Yeah, our platform is built on microservices. And docker. Sometimes an
+individual app or service may be responding to simple pings, but its
+connections to other apps in the system are broken. This is a library for
+writing checks against those external services (an HTTP API, a database,
+memcache, whatever) that attempts to give a _comprehensive_ answer to the
+question "is the application up?".
+
+All of this is wrapped in an endpoint that you can ping and hook up to your
+monitoring and alerting. Put that in your Zabbix and smoke it.
 
 ## Installation
 
