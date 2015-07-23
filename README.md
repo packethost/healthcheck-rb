@@ -34,8 +34,9 @@ Or install it yourself as:
 
 ## Usage
 
-First, we need to set up some checks to run. Healthcheck comes with a couple,
-but you can easily add your own.
+First, we need to configure it.
+
+### Rails
 
 ```ruby
 # config/initializers/healthcheck.rb
@@ -44,28 +45,42 @@ require 'healthcheck/checks/git'
 require 'healthcheck/checks/database/active_record'
 
 Healthcheck.configure do |config|
+  # The checks that you want to run. Defaults to `[]`.
   config.checks = %w(
     Healthcheck::Checks::Git
     Healthcheck::Checks::Database::ActiveRecord
   )
+
+  # The path our healthcheck will be accessible at. Defaults to '/healthcheck'.
+  config.path = '/annie-are-you-ok'
+
+  # Defaults to Rails.logger if you're using Rails, or STDOUT if not.
+  config.logger = logger
 end
 ```
 
-That's all well and good, but we need to set up the middleware so that we have
-a route to ping:
+### Manually
+
+If you're using Sinatra or something, configure it the same way as above, but
+you have to add the middleware yourself:
 
 ```ruby
-# config/application.rb
+require 'healthcheck/middleware'
 
-module MyApp
-  class Application < Rails::Application
-    require 'healthcheck/middleware'
-
-    # Optionally specify a path (defaults to /healthcheck).
-    config.middleware.insert_before 0, Healthcheck::Middleware, '/annie-are-you-ok'
-  end
-end
+use Healthcheck::Middleware, '/annie-are-you-ok' # Path is optional.
 ```
+
+Or, you could just add it as a rack app at an endpoint of your choosing:
+
+```ruby
+require 'healthcheck/application'
+
+run Rack::URLMap.new(
+  '/healthcheck' => Healthcheck::Application.new
+)
+```
+
+Whatever you're using, we gotcha covered.
 
 ## Checks
 

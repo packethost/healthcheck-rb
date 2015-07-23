@@ -13,22 +13,6 @@ RSpec.describe Healthcheck::Configuration do
       end
     end
 
-    context 'when Rails is available' do
-      before do
-        module Rails
-          def self.logger
-            'rails logger'
-          end
-        end
-      end
-
-      it 'returns the configured logger' do
-        expect(Healthcheck.configuration.logger).to eq('rails logger')
-      end
-
-      after { Object.send(:remove_const, :Rails) }
-    end
-
     context 'default' do
       it 'defaults to logging to STDOUT' do
         expect(Healthcheck.configuration.logger).to be_a(::Logger)

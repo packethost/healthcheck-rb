@@ -20,3 +20,5 @@ module Healthcheck
     end
   end
 end
+
+require 'healthcheck/rails' if defined? Rails::Railtie

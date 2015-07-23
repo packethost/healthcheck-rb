@@ -1,8 +1,11 @@
+require 'logger'
+
 module Healthcheck
   class Configuration
     CONFIGURABLE_OPTIONS = {
       logger: nil,
-      checks: []
+      checks: [],
+      path: '/healthcheck'
     }.freeze
 
     attr_accessor(*CONFIGURABLE_OPTIONS.keys)
@@ -14,13 +17,7 @@ module Healthcheck
     end
 
     def logger
-      case
-      when @logger then @logger
-      when defined?(Rails) then Rails.logger
-      else
-        require 'logger'
-        ::Logger.new(STDOUT)
-      end
+      @logger || ::Logger.new(STDOUT)
     end
   end
 end
