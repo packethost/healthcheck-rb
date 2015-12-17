@@ -16,13 +16,13 @@ module Healthcheck
 
     def ok?
       checks.values.map do |check|
-        Thread.new(check) { |c| c.ok? }
+        Thread.new(check, &:ok?)
       end.map(&:value).all?
     end
 
     def to_json
       checks.transform_values do |check|
-        Thread.new(check) { |c| c.report }
+        Thread.new(check, &:report)
       end.transform_values(&:value).to_json
     end
 
