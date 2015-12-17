@@ -33,7 +33,14 @@ module Healthcheck
       when Healthcheck::Checks::AbstractCheck then check
       when Class then check.new
       else check.constantize.new
+      end.tap do |c|
+        c.reset
+        c.paused = paused_data[c.class.slug]
       end
+    end
+
+    def paused_data
+      @paused_data ||= Healthcheck.configuration.paused_checks
     end
   end
 end

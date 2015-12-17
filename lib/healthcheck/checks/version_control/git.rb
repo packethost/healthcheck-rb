@@ -9,11 +9,15 @@ module Healthcheck
         end
 
         def ok?
-          true
+          paused? ? :paused : true
         end
 
         def report
-          result || :unknown
+          case result
+          when :paused then "paused until #{paused}"
+          when nil || false then :unknown
+          else result
+          end
         end
 
         private

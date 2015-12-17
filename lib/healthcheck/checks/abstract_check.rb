@@ -5,13 +5,23 @@ module Healthcheck
   module Checks
     class AbstractCheck
       attr_writer :logger
+      attr_accessor :paused
 
       def ok?
-        result == true
+        [true, :paused].include?(result)
       end
 
       def report
-        ok? ? :ok : :unreachable
+        case result
+        when true then :ok
+        when :paused then "paused until #{paused}"
+        else :unreachable
+        end
+      end
+
+      def reset
+        remove_instance_variable(:@result) if @result
+        true
       end
 
       def self.slug
@@ -25,8 +35,15 @@ module Healthcheck
       end
 
       def result
-        @result = perform unless instance_variable_defined?(:@result)
+        unless instance_variable_defined?(:@result)
+          @result = paused? ? :paused : perform
+        end
+
         @result
+      end
+
+      def paused?
+        paused.is_a?(Time) && paused > Time.now.utc
       end
 
       def perform
