@@ -13,9 +13,9 @@ module Healthcheck
 
       request = Rack::Request.new(env)
       report = report_from_request(request)
-      [report.ok? ? 200 : 500, HEADERS, [report.to_json]]
+      [report.ok? ? 200 : 500, HEADERS.dup, [report.to_json]]
     rescue CheckNotFound => ex
-      [404, HEADERS, [{ errors: [ex.message] }.to_json]]
+      [404, HEADERS.dup, [{ errors: [ex.message] }.to_json]]
     end
 
     private
