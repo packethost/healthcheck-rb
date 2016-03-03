@@ -1,4 +1,5 @@
 require 'logger'
+require 'active_support/inflector'
 require 'active_support/core_ext/hash/keys'
 require 'active_support/core_ext/object/try'
 
@@ -38,6 +39,20 @@ module Healthcheck
 
     def paused_checks
       (@paused_checks.try(:call) || {}).symbolize_keys
+    end
+
+    def checks
+      @initialized_checks ||= @checks.map { |check| initialize_check(check) }
+    end
+
+    private
+
+    def initialize_check(check)
+      case check
+      when Healthcheck::Checks::AbstractCheck then check
+      when Class then check.new
+      else check.constantize.new
+      end
     end
   end
 end

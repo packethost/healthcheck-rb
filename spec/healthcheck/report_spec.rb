@@ -3,7 +3,7 @@ require 'json'
 require 'healthcheck/checks/abstract_check'
 
 RSpec.describe Healthcheck::Report do
-  let(:checks) { [CheckOne, 'CheckTwo', CheckThree.new] }
+  let(:checks) { [CheckOne, CheckTwo, CheckThree].map(&:new) }
   subject { Healthcheck::Report.new(checks) }
 
   describe '#initialize' do

@@ -1,11 +1,14 @@
 require 'healthcheck'
 require 'active_support/inflector'
+require 'active_support/core_ext/module/delegation'
 
 module Healthcheck
   module Checks
     class AbstractCheck
       attr_writer :logger
       attr_accessor :paused
+
+      delegate :slug, to: :class
 
       def ok?
         [true, :paused].include?(result)

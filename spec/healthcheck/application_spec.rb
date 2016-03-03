@@ -9,8 +9,8 @@ RSpec.describe Healthcheck::Application do
     Healthcheck.configure do |config|
       config.checks = [
         Healthcheck::Checks::Sanity,
-        Healthcheck::Checks::TestCheckOne,
-        Healthcheck::Checks::TestCheckTwo
+        'Healthcheck::Checks::TestCheckOne',
+        Healthcheck::Checks::TestCheckTwo.new
       ]
     end
   end
