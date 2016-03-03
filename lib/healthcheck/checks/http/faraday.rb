@@ -15,7 +15,7 @@ module Healthcheck
         def perform
           response = @connection.send(@method, @path)
 
-          fail response.body unless response.success?
+          raise response.body unless response.success?
           true
         rescue => ex
           logger.error "[health report] Error connecting to #{self.class.slug} at #{@method.to_s.upcase} #{@connection.url_prefix}#{@path}: #{ex.message}"

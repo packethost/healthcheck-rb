@@ -82,6 +82,45 @@ run Rack::URLMap.new(
 
 Whatever you're using, we gotcha covered.
 
+### Calling the healthcheck endpoint
+
+Once you've set up the healthcheck middleware in your app, you can hit the
+endpoint at whatever path you configured:
+
+```
+$ curl -i http://example.com/healthcheck
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Status: 200 OK
+...
+
+{"git":"cc3b4c7","database":"ok"}
+```
+
+The healthcheck will return a 200 status if all the checks were successful, and
+a 500 if any of them failed. The response body will always be in JSON format,
+and will always contain a status message for each of the checks included in the
+report.
+
+You can also limit your calls to only certain checks by including a `checks`
+parameter in the query string:
+
+```
+$ curl -i http://example.com/healthcheck?checks=git
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Status: 200 OK
+...
+
+{"git":"cc3b4c7"}
+```
+
+The `checks` parameter can be either a string or an array
+(`checks[]=git&checks=database`) to run multiple checks. A 404 status will be
+returned if any of the checks you specify don't exist.
+
 ## Checks
 
 There are lots of checks you can use or subclass. [Here's a list of the checks

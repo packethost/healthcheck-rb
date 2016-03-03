@@ -47,7 +47,7 @@ module Healthcheck
       end
 
       def perform
-        fail NotImplementedError, 'Checks must implement this method'
+        raise NotImplementedError, 'Checks must implement this method'
       end
     end
   end
