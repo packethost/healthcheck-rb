@@ -103,11 +103,11 @@ a 500 if any of them failed. The response body will always be in JSON format,
 and will always contain a status message for each of the checks included in the
 report.
 
-You can also limit your calls to only certain checks by including a `checks`
-parameter in the query string:
+You can also limit your calls to only certain checks by including the `only`
+and/or `except` parameters in the query string:
 
 ```
-$ curl -i http://example.com/healthcheck?checks=git
+$ curl -i http://example.com/healthcheck?only=git
 
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -115,11 +115,21 @@ Status: 200 OK
 ...
 
 {"git":"cc3b4c7"}
+
+$ curl -i http://example.com/healthcheck?except=git
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Status: 200 OK
+...
+
+{"database":"ok"}
 ```
 
-The `checks` parameter can be either a string or an array
-(`checks[]=git&checks=database`) to run multiple checks. A 404 status will be
-returned if any of the checks you specify don't exist.
+These parameters can be either a string or an array
+(`only[]=git&only[]=database`) to filter multiple checks. `except` has
+precedent over `only`--if you specify a check in both parameters, it will not
+be run.
 
 ## Checks
 

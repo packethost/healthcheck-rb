@@ -35,7 +35,7 @@ RSpec.describe Healthcheck::Application do
     end
 
     context 'with no checks specified in the query string' do
-      let(:env) { { Rack::QUERY_STRING => 'checks=' } }
+      let(:env) { { Rack::QUERY_STRING => 'only=' } }
 
       it 'runs all of the checks' do
         expect(response).to be_ok
@@ -47,7 +47,7 @@ RSpec.describe Healthcheck::Application do
     end
 
     context 'with a single check in the query string' do
-      let(:env) { { Rack::QUERY_STRING => 'checks=sanity' } }
+      let(:env) { { Rack::QUERY_STRING => 'only=sanity' } }
 
       it 'only runs the specified checks' do
         expect(response).to be_ok
@@ -57,7 +57,7 @@ RSpec.describe Healthcheck::Application do
     end
 
     context 'with an array of checks in the query string' do
-      let(:env) { { Rack::QUERY_STRING => 'checks[]=sanity&checks[]=test_check_one' } }
+      let(:env) { { Rack::QUERY_STRING => 'only[]=sanity&only[]=test_check_one' } }
 
       it 'only runs the specified checks' do
         expect(response).to be_ok
@@ -67,12 +67,14 @@ RSpec.describe Healthcheck::Application do
       end
     end
 
-    context 'with an invalid check' do
-      let(:env) { { Rack::QUERY_STRING => 'checks=not_found' } }
+    context 'with an except value in the query string' do
+      let(:env) { { Rack::QUERY_STRING => 'except=test_check_one' } }
 
-      it 'returns a 404 response' do
-        expect(response).to be_not_found
-        expect(parsed_response_body['errors'].first).to be =~ /not found/
+      it 'only runs the specified checks' do
+        expect(response).to be_ok
+        expect(parsed_response_body.size).to be(2)
+        expect(parsed_response_body).to have_key('sanity')
+        expect(parsed_response_body).to have_key('test_check_two')
       end
     end
   end

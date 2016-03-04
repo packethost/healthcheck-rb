@@ -6,6 +6,7 @@ require 'active_support/core_ext/object/blank'
 
 module Healthcheck
   class Application
+    FILTERS = %w(only except).freeze
     HEADERS = { 'Content-Type' => 'application/json' }.freeze
 
     def call(env)
@@ -14,39 +15,28 @@ module Healthcheck
       request = Rack::Request.new(env)
       report = report_from_request(request)
       [report.ok? ? 200 : 500, HEADERS.dup, [report.to_json]]
-    rescue CheckNotFound => ex
-      [404, HEADERS.dup, [{ errors: [ex.message] }.to_json]]
     end
 
     private
 
     def report_from_request(request)
-      checks = checks_from_query(request.GET)
+      checks = filter_checks(Healthcheck.configuration.checks, request.GET)
       Healthcheck::Report.new(checks)
     end
 
-    def checks_from_query(query)
-      check_slugs = Array.wrap(query['checks']).uniq.reject(&:blank?).map(&:to_sym)
-      all_checks = Healthcheck.configuration.checks
+    def filter_checks(checks, query)
+      only, except = filters_from_query(query)
 
-      if check_slugs.empty?
-        all_checks
-      else
-        filter_checks(all_checks, check_slugs)
+      filtered = checks.dup
+      filtered.select! { |check| only.include?(check.slug) } unless only.empty?
+      filtered.reject! { |check| except.include?(check.slug) }
+      filtered
+    end
+
+    def filters_from_query(query)
+      FILTERS.map do |param|
+        Array.wrap(query[param]).uniq.reject(&:blank?).map(&:to_sym)
       end
     end
-
-    def filter_checks(checks, slugs)
-      filtered = slugs
-                 .map { |slug| [slug, checks.find { |check| check.slug == slug }] }
-                 .to_h
-
-      not_found = filtered.select { |_, v| v.nil? }.keys
-      raise CheckNotFound, "Check(s) #{not_found.to_sentence} not found" unless not_found.empty?
-
-      filtered.values
-    end
   end
-
-  class CheckNotFound < RuntimeError; end
 end
