@@ -1,6 +1,7 @@
 require 'healthcheck/version'
 require 'healthcheck/configuration'
 require 'healthcheck/report'
+require 'healthcheck/utils'
 require 'healthcheck/checks/abstract_check'
 require 'active_support/core_ext/module/attribute_accessors'
 

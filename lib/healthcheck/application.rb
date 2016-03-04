@@ -2,7 +2,11 @@ require 'healthcheck'
 require 'rack/request'
 require 'active_support/core_ext/array/wrap'
 require 'active_support/core_ext/array/conversions'
+require 'active_support/core_ext/enumerable'
+require 'active_support/core_ext/hash/except'
+require 'active_support/core_ext/hash/slice'
 require 'active_support/core_ext/object/blank'
+require 'active_support/core_ext/enumerable'
 
 module Healthcheck
   class Application
@@ -27,10 +31,11 @@ module Healthcheck
     def filter_checks(checks, query)
       only, except = filters_from_query(query)
 
-      filtered = checks.dup
-      filtered.select! { |check| only.include?(check.slug) } unless only.empty?
-      filtered.reject! { |check| except.include?(check.slug) }
-      filtered
+      slugged = checks.index_by { |check| Healthcheck::Utils.slug_from_check(check) }
+
+      slugged.slice!(*only) unless only.empty?
+      slugged.except!(*except)
+      slugged.values
     end
 
     def filters_from_query(query)
