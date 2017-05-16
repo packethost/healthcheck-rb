@@ -1,6 +1,5 @@
 language: ruby
 rvm:
-  - 2.2.2
-  - 2.1.5
+  - 2.3.6
 env:
   - "COVERAGE=true"

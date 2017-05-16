@@ -10,7 +10,7 @@ require 'active_support/core_ext/enumerable'
 
 module Healthcheck
   class Application
-    FILTERS = %w(only except).freeze
+    FILTERS = %w[only except].freeze
     HEADERS = { 'Content-Type' => 'application/json' }.freeze
 
     def call(env)

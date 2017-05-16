@@ -12,7 +12,7 @@ module Healthcheck
 
         def perform
           ::ActiveRecord::Base.connection.present?
-        rescue => ex
+        rescue StandardError => ex
           logger.error "[health report] Error connecting to database: #{ex.message}"
           false
         end

@@ -28,7 +28,7 @@ module Healthcheck
 
         def find_sha_from_git
           `git --git-dir="#{Rails.root.join('.git')}" rev-parse --short HEAD`.strip
-        rescue
+        rescue StandardError
           nil
         end
       end

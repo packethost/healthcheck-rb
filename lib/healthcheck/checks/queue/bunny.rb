@@ -18,7 +18,7 @@ module Healthcheck
           conn = ::Bunny.new(@amqp)
           conn.start && conn.close
           true
-        rescue => ex
+        rescue StandardError => ex
           logger.error "[health report] Error connecting to RabbitMQ: #{ex.message}"
           false
         end

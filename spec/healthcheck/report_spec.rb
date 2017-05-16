@@ -16,7 +16,7 @@ RSpec.describe Healthcheck::Report do
 
   describe 'ok?' do
     it 'delegates to each of the checks' do
-      [:one, :two, :three].each do |name|
+      %i[one two three].each do |name|
         expect(subject.checks[:"check_#{name}"]).to receive(:ok?).once.and_call_original
       end
 
@@ -30,7 +30,7 @@ RSpec.describe Healthcheck::Report do
 
   describe 'to_json' do
     it 'collects a report for each of the checks' do
-      [:one, :two, :three].each do |name|
+      %i[one two three].each do |name|
         expect(subject.checks[:"check_#{name}"]).to receive(:report).once.and_call_original
       end
 
