@@ -13,11 +13,11 @@ module Healthcheck
     end
 
     def configuration
-      @_configuration ||= Configuration.new
+      @configuration ||= Configuration.new
     end
 
     def reset_configuration!
-      @_configuration = nil
+      @configuration = nil
     end
   end
 end
