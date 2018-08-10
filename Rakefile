@@ -6,6 +6,6 @@ RSpec::Core::RakeTask.new(:spec)
 RuboCop::RakeTask.new
 
 desc 'Run the CI suite'
-task ci: [:spec, :rubocop]
+task ci: %i[spec rubocop]
 
 task default: :ci

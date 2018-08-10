@@ -18,7 +18,7 @@ module Healthcheck
           def perform
             ::Rails.cache.dalli.with { |client| client.get(@key) }
             true
-          rescue => ex
+          rescue StandardError => ex
             logger.error "[health report] Error connecting to memcache: #{ex.message}"
             false
           end

@@ -3,7 +3,7 @@ require 'healthcheck/application'
 
 module Healthcheck
   class Middleware
-    attr_accessor :path
+    attr_reader :path
 
     def initialize(app, path = nil)
       @app = app
