@@ -8,7 +8,7 @@ module Healthcheck
           @information = information
         end
 
-        def slug
+        def self.slug
           :service
         end
 
