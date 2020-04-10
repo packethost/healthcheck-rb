@@ -35,7 +35,7 @@ module Healthcheck
       end.tap do |c|
         c.reset
         c.paused = paused_data[c.class.slug]
-        c.filter_by_query(query) unless query.present?
+        c.filter_by_query(query) if query.present?
       end
     end
 
