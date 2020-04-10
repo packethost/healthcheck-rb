@@ -19,7 +19,7 @@ module Healthcheck
       end.map(&:value).all?
     end
 
-    def to_json
+    def to_json(_ = nil)
       checks.transform_values do |check|
         Thread.new(check, &:report)
       end.transform_values(&:value).to_json
