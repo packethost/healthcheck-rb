@@ -24,12 +24,15 @@ module Healthcheck
 
       def reset
         remove_instance_variable(:@result) if @result
+        filter_by_query({})
         true
       end
 
       def self.slug
         name.to_s.demodulize.underscore.to_sym
       end
+
+      def filter_by_query(query); end
 
       private
 
