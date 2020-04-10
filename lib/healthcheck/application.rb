@@ -25,7 +25,7 @@ module Healthcheck
 
     def report_from_request(request)
       checks = filter_checks(Healthcheck.configuration.checks, request.GET)
-      Healthcheck::Report.new(checks)
+      Healthcheck::Report.new(checks, request.GET)
     end
 
     def filter_checks(checks, query)

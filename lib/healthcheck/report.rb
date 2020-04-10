@@ -8,8 +8,8 @@ module Healthcheck
   class Report
     attr_reader :checks
 
-    def initialize(checks = Healthcheck.configuration.checks)
-      @checks = checks.map { |check| initialize_check(check) }
+    def initialize(checks = Healthcheck.configuration.checks, query = nil)
+      @checks = checks.map { |check| initialize_check(check, query) }
                       .index_by(&:slug)
     end
 
@@ -27,7 +27,7 @@ module Healthcheck
 
     private
 
-    def initialize_check(check)
+    def initialize_check(check, query)
       case check
       when Healthcheck::Checks::AbstractCheck then check
       when Class then check.new
@@ -35,6 +35,7 @@ module Healthcheck
       end.tap do |c|
         c.reset
         c.paused = paused_data[c.class.slug]
+        c.filter_by_query(query) unless query.nil?
       end
     end
 
