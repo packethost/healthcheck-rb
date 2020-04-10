@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'healthcheck/application'
 require 'healthcheck/checks/sanity'
 require 'support/test_check_one'
-require 'rack/response'
 
 RSpec.describe Healthcheck::Application do
   before do
