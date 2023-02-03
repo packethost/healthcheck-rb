@@ -2,7 +2,6 @@ require 'healthcheck'
 require 'json'
 require 'active_support/inflector'
 require 'active_support/core_ext/enumerable'
-require 'active_support/core_ext/hash/transform_values'
 
 module Healthcheck
   class Report
