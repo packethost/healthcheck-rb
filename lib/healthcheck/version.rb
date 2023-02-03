@@ -1,3 +1,3 @@
 module Healthcheck
-  VERSION = '1.0.3'.freeze
+  VERSION = '1.0.6'.freeze
 end
