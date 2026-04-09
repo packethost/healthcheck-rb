@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/packethost/healthcheck-rb.svg)](https://travis-ci.org/packethost/healthcheck-rb)
 
+> [!WARNING]
+> With the upcoming EoL of Equinix Metal on June 30, 2026, this repo is being archived on July 1, 2026.
+
 > Another issue is If the components do not compose cleanly, then all you are doing is shifting complexity from inside a component to the connections between components.
 >
 > -- <cite>Martin Fowler & James Lewis, [Microservices](http://martinfowler.com/articles/microservices.html)</cite>
